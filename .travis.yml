@@ -1,32 +1,31 @@
-sudo: false
+sudo: true
 language: cpp
 
 compiler:
   - gcc
-  - clang
+  # - clang
 
-addons:
-    apt:
-        sources:
-            - llvm-toolchain-precise
-            - ubuntu-toolchain-r-test
-        packages:
-            - clang-3.7
-            - g++-5
-            - gcc-5
+before_install:
+  # g++4.9
+  - if [ "$CXX" == "g++" ]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi
 
+  # clang 3.4
+  #- if [ "$CXX" == "clang++" ]; then sudo add-apt-repository -y ppa:h-rayflood/llvm; fi
 
-install:
-    - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
-    - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.7" CC="clang-3.7"; fi
+  - sudo apt-get update -qq
 
+#install:
+  # g++4.8.1
+  - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.9; fi
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9"; fi
+
+  # clang 3.4
+  #- if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
+  #- if [ "$CXX" == "clang++" ]; then export CXX="clang++-3.4"; fi
 
 script: 
  - $CXX --version
+ - g++ --version
  - qmake
+ - cat Makefile
  - make
-
-
-
-
-
